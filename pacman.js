@@ -25,9 +25,42 @@ var render = function() {
 	// anima as duas partes do pacman
 	this.animatePacman();
 
+	// rotação do sistema
+	system.rotateY(0.009);
+
 	renderer.render( scene, camera );
 
 };
+
+
+/*
+cria o sistema: todos os objetos e o pai
+desses objetos, ao redor do qual eles orbitam
+*/
+var createSystem = function() {
+
+	system = new THREE.Group();
+
+	// criar o centro, objeto pai
+	// ao redor do qual os outros orbitam
+	var material_centro = new THREE.MeshLambertMaterial( { color: 'pink' } );
+	var geometry_centro = new THREE.SphereGeometry( 0.1, 32, 16, 0);
+	var centro = new THREE.Mesh( geometry_centro, material_centro );
+
+	// criando o primeiro filho: o pacman
+	var pacman = createPacman();
+	// pacman passa a ser objeto filho do centro
+	centro.add(pacman);
+
+	// posicao inicial do pacman: a esquerda do centro
+	pacman.position.x = -3;
+	// com a abertura da boca virada para fora da tela
+	pacman.rotateY(-Math.PI / 2);
+
+	// adicionando o centro no sistema
+	system.add(centro);
+	scene.add(system);
+}
 
 // cria o pacman
 var createPacman = function() {
@@ -54,6 +87,7 @@ var createPacman = function() {
 	var d2 = createADisc();
 	d2.rotation.x -= Math.PI*0.5;
 
+	// cria os olhos do Pac-Man
     var olho1 = createPacmanEyes();
     olho1.position.set(-0.1, 0.4, 0.8);
 
@@ -67,7 +101,7 @@ var createPacman = function() {
     pacman.add(olho1);
     pacman.add(olho2);
 
-	scene.add( pacman );
+	return( pacman );
 }
 
 var createPacmanEyes = function() {
@@ -84,7 +118,6 @@ var createPacmanEyes = function() {
 	olhos.add(parte_olhos);
     return olhos;
 }
-
 
 // cria uma metade de esfera
 var createAMidEsphere = function() {
@@ -139,9 +172,6 @@ var animatePacman = function() {
 		pacman.children[2].rotation.y -= 0.02;
 		pacman.children[3].rotation.y -= 0.02;
 	}
-
-    
-    //pacman.translate( 10 / 2, 10 / 2, 10 / 2 );
 }
 
 var createDirectionalLight = function() {
@@ -186,7 +216,8 @@ var init = function() {
 	document.body.appendChild( renderer.domElement );
 
 	// adiciona o pacman e as fontes de luz à cena
-	this.createPacman();
+	//this.createPacman();
+	this.createSystem();
 	this.createDirectionalLight();
 	this.createAmbientLight();
 
