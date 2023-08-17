@@ -277,8 +277,6 @@ var createCamera = function() {
 		0.1,
 		1000
 	);
-	// posiciona a subcâmera na tela
-	cameraL.viewport = new THREE.Vector4(0, 0, window.innerWidth*0.5, window.innerHeight);
 
 	// cria a subcâmera da direita
 	var cameraR = new THREE.PerspectiveCamera(
@@ -287,8 +285,6 @@ var createCamera = function() {
 		0.1,
 		1000
 	);
-	// posiciona a subcâmera na tela
-	cameraR.viewport = new THREE.Vector4(window.innerWidth*0.5, 0, window.innerWidth*0.5, window.innerHeight);
 
 	// adiciona as duas câmeras a uma ArrayCamera (para amabas serem renderizadas)
 	camera = new THREE.ArrayCamera( [cameraL, cameraR]);
@@ -299,9 +295,7 @@ var createCamera = function() {
 	cameraL.position.z = 5;
 	cameraL.lookAt(scene.position);
 	cameraL.updateMatrixWorld();// usado para atualizar a matriz de projeção da câmera
-	cameraR.position.x = -3;
-	cameraR.position.y = 2;
-	cameraR.position.z = 5;
+	cameraR.position.z = 10;
 	cameraR.lookAt(scene.position);
 	cameraR.updateMatrixWorld();
 };
@@ -311,6 +305,20 @@ var init = function() {
 	// cria a cena
 	scene = new THREE.Scene();
 
+	// cria a câmera
+	/*camera = new THREE.PerspectiveCamera(
+		50,
+		window.innerWidth / window.innerHeight,
+		0.1,
+		1000
+	);
+
+	// reposiciona a câmera
+	camera.position.x = 2;
+	camera.position.y = 1;
+	camera.position.z = 5;
+	camera.lookAt(scene.position);*/
+
 	// cria o renderizador
 	renderer = new THREE.WebGLRenderer();
 	renderer.setSize( window.innerWidth, window.innerHeight );
@@ -319,6 +327,7 @@ var init = function() {
 	document.body.appendChild( renderer.domElement );
 
 	// adiciona o pacman e as fontes de luz à cena
+	//this.createPacman();
 	this.createSystem();
 	this.createCamera();
 	this.createDirectionalLight();
