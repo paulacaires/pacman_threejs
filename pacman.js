@@ -27,11 +27,8 @@ var render = function() {
 
 	// rotação do sistema
 	system.rotateY(0.009);
-
 	renderer.render( scene, camera );
-
 };
-
 
 /*
 cria o sistema: todos os objetos e o pai
@@ -43,8 +40,8 @@ var createSystem = function() {
 
 	// criar o centro, objeto pai
 	// ao redor do qual os outros orbitam
-	var material_centro = new THREE.MeshLambertMaterial( { color: 'pink' } );
-	var geometry_centro = new THREE.SphereGeometry( 0.1, 32, 16, 0);
+	var material_centro = new THREE.MeshLambertMaterial( { color: 'black' } );
+	var geometry_centro = new THREE.SphereGeometry( 0, 32, 16, 0);
 	var centro = new THREE.Mesh( geometry_centro, material_centro );
 
 	// criando o primeiro filho: o pacman
@@ -53,13 +50,95 @@ var createSystem = function() {
 	centro.add(pacman);
 
 	// posicao inicial do pacman: a esquerda do centro
-	pacman.position.x = -3;
+	pacman.position.x = -2;
 	// com a abertura da boca virada para fora da tela
 	pacman.rotateY(-Math.PI / 2);
+
+	// criando o segundo filho: o fantasma
+	var fantasma = createGhost();
+	// fantasma passa a ser filho do centro
+	centro.add(fantasma);
+
+	// posicao do fantasma
+	fantasma.position.x = 2;
+
+	// angulo inicial
+	fantasma.rotateY(Math.PI * 0.5);
 
 	// adicionando o centro no sistema
 	system.add(centro);
 	scene.add(system);
+}
+
+// cria o fantasma
+var createGhost = function() {
+
+	ghost = new THREE.Group();
+
+	var cabeca = createGhostHead();
+	var corpo = createGhostBody();
+	var olho1 = createGhostEye();
+	var olho2 = createGhostEye();
+ 
+	ghost.add(cabeca);
+	ghost.add(corpo);
+	ghost.add(olho1);
+	ghost.add(olho2);
+
+	// posiciona os olhos
+	olho1.position.set(0.7, 0, 0.4);
+	olho2.position.set(0.7, 0, -0.4);
+
+	return( ghost );
+
+}
+
+// cria a cabeça do fantasma
+var createGhostHead = function() {
+
+	var geometry = new THREE.SphereGeometry( 0.9, 32, 16, 0, Math.PI );
+	var material = new THREE.MeshBasicMaterial( { color: 'red' } );
+    var cabeca = new THREE.Mesh( geometry, material );
+	// rotaciona a metade da esfera para ficar para "cima"
+	cabeca.rotation.x += Math.PI*(-0.5);    
+	return (cabeca);
+
+}
+
+// cria o corpo do fantasma
+var createGhostBody = function() {
+
+	var geometry_body = new THREE.CylinderGeometry( 0.9, 0.9, 1, 64, 64, true); 
+    var material_body = new THREE.MeshBasicMaterial( {color: 'red'} ); 
+    var body = new THREE.Mesh( geometry_body, material_body );
+    body.position.y -= 0.45; 
+    return (body);
+
+}
+
+// cria o olho do fantasma
+var createGhostEye = function() {
+	olho = new THREE.Group();
+
+	// parte branca do olho
+    var geometry_olhos = new THREE.SphereGeometry( 0.2, 32, 16, 0);
+	var material_olhos = new THREE.MeshBasicMaterial( { color: 'white' } );
+    var parte_olhos = new THREE.Mesh( geometry_olhos, material_olhos );
+
+    // adiciona efeitos de sombras
+	parte_olhos.castShadow = true;
+	parte_olhos.receiveShadow = true;
+
+	// pupila do olho
+	var geometry_pupila = new THREE.SphereGeometry( 0.1, 32, 16, 0);
+	var material_pupila = new THREE.MeshBasicMaterial( { color: 'blue' } );
+    var pupila = new THREE.Mesh( geometry_pupila, material_pupila );	
+	// reposicionando a pupila
+	pupila.position.set(0.12, -0.01, 0);
+
+	olho.add(parte_olhos);
+	olho.add(pupila);
+    return olho;
 }
 
 // cria o pacman
