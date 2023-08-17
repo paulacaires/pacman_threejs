@@ -54,14 +54,37 @@ var createPacman = function() {
 	var d2 = createADisc();
 	d2.rotation.x -= Math.PI*0.5;
 
+    var olho1 = createPacmanEyes();
+    olho1.position.set(-0.1, 0.4, 0.8);
+
+    var olho2 = createPacmanEyes();
+    olho2.position.set(-0.1, 0.4, -0.8);
+ 
 	pacman.add(me1);
 	pacman.add(me2);
 	pacman.add(d1);
 	pacman.add(d2);
+    pacman.add(olho1);
+    pacman.add(olho2);
 
 	scene.add( pacman );
-
 }
+
+var createPacmanEyes = function() {
+    olhos = new THREE.Group();
+
+    var geometry_olhos = new THREE.SphereGeometry( 0.2, 32, 16, 0);
+	var material_olhos = new THREE.MeshBasicMaterial( { color: 'black' } );
+    parte_olhos = new THREE.Mesh( geometry_olhos, material_olhos );
+
+    // adiciona efeitos de sombras
+	parte_olhos.castShadow = true;
+	parte_olhos.receiveShadow = true;
+
+	olhos.add(parte_olhos);
+    return olhos;
+}
+
 
 // cria uma metade de esfera
 var createAMidEsphere = function() {
@@ -116,6 +139,9 @@ var animatePacman = function() {
 		pacman.children[2].rotation.y -= 0.02;
 		pacman.children[3].rotation.y -= 0.02;
 	}
+
+    
+    //pacman.translate( 10 / 2, 10 / 2, 10 / 2 );
 }
 
 var createDirectionalLight = function() {
