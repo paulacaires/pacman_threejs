@@ -1,5 +1,6 @@
 var scene;
 var camera;
+var cameraAtual;
 var renderer;
 var pacman;
 var fase;
@@ -27,7 +28,7 @@ var render = function() {
 
 	// rotação do sistema
 	system.rotateY(0.009);
-	renderer.render( scene, camera );
+	renderer.render( scene, camera.cameras[cameraAtual] );
 };
 
 /*
@@ -268,24 +269,47 @@ var createAmbientLight = function() {
 	scene.add(ambientLight);
 };
 
-var init = function() {
-
-	// cria a cena
-	scene = new THREE.Scene();
-
-	// cria a câmera
-	camera = new THREE.PerspectiveCamera(
+var createCamera = function() {
+	// cria a subcâmera da esquerda
+	var cameraL = new THREE.PerspectiveCamera(
 		50,
 		window.innerWidth / window.innerHeight,
 		0.1,
 		1000
 	);
+	// posiciona a subcâmera na tela
+	cameraL.viewport = new THREE.Vector4(0, 0, window.innerWidth*0.5, window.innerHeight);
 
-	// reposiciona a câmera
-	camera.position.x = 2;
-	camera.position.y = 1;
-	camera.position.z = 5;
-	camera.lookAt(scene.position);
+	// cria a subcâmera da direita
+	var cameraR = new THREE.PerspectiveCamera(
+		50,
+		window.innerWidth / window.innerHeight,
+		0.1,
+		1000
+	);
+	// posiciona a subcâmera na tela
+	cameraR.viewport = new THREE.Vector4(window.innerWidth*0.5, 0, window.innerWidth*0.5, window.innerHeight);
+
+	// adiciona as duas câmeras a uma ArrayCamera (para amabas serem renderizadas)
+	camera = new THREE.ArrayCamera( [cameraL, cameraR]);
+
+	// reposiciona ambas as câmeras
+	cameraL.position.x = 3;
+	cameraL.position.y = 2;
+	cameraL.position.z = 5;
+	cameraL.lookAt(scene.position);
+	cameraL.updateMatrixWorld();// usado para atualizar a matriz de projeção da câmera
+	cameraR.position.x = -3;
+	cameraR.position.y = 2;
+	cameraR.position.z = 5;
+	cameraR.lookAt(scene.position);
+	cameraR.updateMatrixWorld();
+};
+
+var init = function() {
+
+	// cria a cena
+	scene = new THREE.Scene();
 
 	// cria o renderizador
 	renderer = new THREE.WebGLRenderer();
@@ -295,14 +319,15 @@ var init = function() {
 	document.body.appendChild( renderer.domElement );
 
 	// adiciona o pacman e as fontes de luz à cena
-	//this.createPacman();
 	this.createSystem();
+	this.createCamera();
 	this.createDirectionalLight();
 	this.createAmbientLight();
 
 	// inicializa variáveis usadas na animação
 	fase = -1;
 	abrir = 1;
+	cameraAtual = 0;
 
 	this.render();
 
