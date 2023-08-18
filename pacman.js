@@ -2,6 +2,7 @@ var scene;
 var camera;
 var cameraAtual;
 var renderer;
+var plano;
 var pacman;
 var fase;
 var abrir;
@@ -25,6 +26,10 @@ var render = function() {
 
 	// anima as duas partes do pacman
 	this.animatePacman();
+
+	//adiciona renderização de sombras
+	renderer.shadowMap.enabled = true;
+	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 	// rotação do sistema
 	system.rotateY(0.009);
@@ -50,10 +55,11 @@ var createSystem = function() {
 	// pacman passa a ser objeto filho do centro
 	centro.add(pacman);
 
-	// posicao inicial do pacman: a esquerda do centro
-	pacman.position.x = -2;
-	// com a abertura da boca virada para fora da tela
-	pacman.rotateY(-Math.PI / 2);
+	// posicao inicial do pacman: atŕas do centro e um pouco à direita
+	pacman.position.x = 1;
+	pacman.position.z = -3;
+	// com a abertura da boca virada para o lado da tela
+	pacman.rotateY(Math.PI - 0.5);
 
 	// criando o segundo filho: o fantasma
 	var fantasma = createGhost();
@@ -61,7 +67,7 @@ var createSystem = function() {
 	centro.add(fantasma);
 
 	// posicao do fantasma
-	fantasma.position.x = 2;
+	fantasma.position.x = 3;
 
 	// angulo inicial
 	fantasma.rotateY(Math.PI * 0.5);
@@ -98,10 +104,15 @@ var createGhost = function() {
 var createGhostHead = function() {
 
 	var geometry = new THREE.SphereGeometry( 0.9, 32, 16, 0, Math.PI );
-	var material = new THREE.MeshBasicMaterial( { color: 'red' } );
-    var cabeca = new THREE.Mesh( geometry, material );
+	var material = new THREE.MeshLambertMaterial( { color: 'red' } );
+	var cabeca = new THREE.Mesh( geometry, material );
+
+	// adiciona efeitos de sombras
+	cabeca.castShadow = true;
+	cabeca.receiveShadow = true;
+
 	// rotaciona a metade da esfera para ficar para "cima"
-	cabeca.rotation.x += Math.PI*(-0.5);    
+	cabeca.rotation.x += Math.PI*(-0.5);
 	return (cabeca);
 
 }
@@ -110,10 +121,15 @@ var createGhostHead = function() {
 var createGhostBody = function() {
 
 	var geometry_body = new THREE.CylinderGeometry( 0.9, 0.9, 1, 64, 64, true); 
-    var material_body = new THREE.MeshBasicMaterial( {color: 'red'} ); 
-    var body = new THREE.Mesh( geometry_body, material_body );
-    body.position.y -= 0.45; 
-    return (body);
+	var material_body = new THREE.MeshLambertMaterial( {color: 'red'} ); 
+	var body = new THREE.Mesh( geometry_body, material_body );
+
+	// adiciona efeitos de sombras
+	body.castShadow = true;
+	body.receiveShadow = true;
+
+	body.position.y -= 0.45; 
+	return (body);
 
 }
 
@@ -123,7 +139,7 @@ var createGhostEye = function() {
 
 	// parte branca do olho
     var geometry_olhos = new THREE.SphereGeometry( 0.2, 32, 16, 0);
-	var material_olhos = new THREE.MeshBasicMaterial( { color: 'white' } );
+	var material_olhos = new THREE.MeshLambertMaterial( { color: 'white' } );
     var parte_olhos = new THREE.Mesh( geometry_olhos, material_olhos );
 
     // adiciona efeitos de sombras
@@ -132,8 +148,13 @@ var createGhostEye = function() {
 
 	// pupila do olho
 	var geometry_pupila = new THREE.SphereGeometry( 0.1, 32, 16, 0);
-	var material_pupila = new THREE.MeshBasicMaterial( { color: 'blue' } );
-    var pupila = new THREE.Mesh( geometry_pupila, material_pupila );	
+	var material_pupila = new THREE.MeshLambertMaterial( { color: 'blue' } );
+    var pupila = new THREE.Mesh( geometry_pupila, material_pupila );
+
+    // adiciona efeitos de sombras
+	pupila.castShadow = true;
+	pupila.receiveShadow = true;
+
 	// reposicionando a pupila
 	pupila.position.set(0.12, -0.01, 0);
 
@@ -185,18 +206,18 @@ var createPacman = function() {
 }
 
 var createPacmanEyes = function() {
-    olhos = new THREE.Group();
+	olhos = new THREE.Group();
 
-    var geometry_olhos = new THREE.SphereGeometry( 0.2, 32, 16, 0);
-	var material_olhos = new THREE.MeshBasicMaterial( { color: 'black' } );
-    parte_olhos = new THREE.Mesh( geometry_olhos, material_olhos );
+	var geometry_olhos = new THREE.SphereGeometry( 0.2, 32, 16, 0);
+	var material_olhos = new THREE.MeshLambertMaterial( { color: 'black' } );
+	parte_olhos = new THREE.Mesh( geometry_olhos, material_olhos );
 
-    // adiciona efeitos de sombras
+	// adiciona efeitos de sombras
 	parte_olhos.castShadow = true;
 	parte_olhos.receiveShadow = true;
 
 	olhos.add(parte_olhos);
-    return olhos;
+	return olhos;
 }
 
 // cria uma metade de esfera
@@ -290,34 +311,35 @@ var createCamera = function() {
 	camera = new THREE.ArrayCamera( [cameraL, cameraR]);
 
 	// reposiciona ambas as câmeras
-	cameraL.position.x = 3;
-	cameraL.position.y = 2;
-	cameraL.position.z = 5;
+	cameraL.position.set(3, 2, 6);
 	cameraL.lookAt(scene.position);
 	cameraL.updateMatrixWorld();// usado para atualizar a matriz de projeção da câmera
-	cameraR.position.z = 10;
+	cameraR.position.set(-3, 2, -6);
 	cameraR.lookAt(scene.position);
 	cameraR.updateMatrixWorld();
+};
+
+var createPlane = function() {
+	var planeGeometry = new THREE.PlaneGeometry(1000, 1000);
+	var planeMaterial = new THREE.MeshPhongMaterial( { color: 0x6959CD} );
+
+	plane = new THREE.Mesh(planeGeometry, planeMaterial);
+
+	plane.castShadow = true;
+	plane.receiveShadow = true;
+
+	plane.rotation.x = -0.5 * Math.PI;
+	plane.position.y = -1;
+
+	plane.receiveShadow = true;
+
+	scene.add(plane);
 };
 
 var init = function() {
 
 	// cria a cena
 	scene = new THREE.Scene();
-
-	// cria a câmera
-	/*camera = new THREE.PerspectiveCamera(
-		50,
-		window.innerWidth / window.innerHeight,
-		0.1,
-		1000
-	);
-
-	// reposiciona a câmera
-	camera.position.x = 2;
-	camera.position.y = 1;
-	camera.position.z = 5;
-	camera.lookAt(scene.position);*/
 
 	// cria o renderizador
 	renderer = new THREE.WebGLRenderer();
@@ -327,9 +349,9 @@ var init = function() {
 	document.body.appendChild( renderer.domElement );
 
 	// adiciona o pacman e as fontes de luz à cena
-	//this.createPacman();
 	this.createSystem();
 	this.createCamera();
+	this.createPlane();
 	this.createDirectionalLight();
 	this.createAmbientLight();
 
