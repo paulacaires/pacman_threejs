@@ -40,6 +40,8 @@ Na **câmera 2** podemos ver a cena ...
 
 ## Implementação
 
+### Pacman e Fantasma
+
 Primeiramente, modelamos nossos dois personagens principais, o _Pacman_
  e o _Fantasma_, ambos são na verdade do tipo `THREE.Group()`, que nada
  mais é que um grupo de objetos. Cada um desses objetos foi implementado
@@ -53,7 +55,7 @@ O **pacman** é formado por 6 objetos:
 - seu corpo é formado por duas meia-esferas, implementadas usando
  `THREE.SphereGeometry()` passando como parâmetro _phiLenght_ igual a
  _Math.PI_, metade do valor padrão (Math.PI*2). As duas partes foram
- rotacionadas de modo que se complementassem como uma esfera,
+ rotacionadas de modo que se complementassem como uma esfera inteira,
  possibilitando a animação que simula o abrir e fechar da boca do
  personagem;
 - o interior de sua boca são dois discos, modelados usando
@@ -75,20 +77,32 @@ O **fantasma** é formado por 6 objetos:
  usando `THREE.CylinderGeometry()` passando como argumento _openEnded_
  igual a _true_, fazendo assim com que as extremidades do cilindro
  sejam abertas. Ele foi posicionado de modo que sua parte superior
- encostasse na borda de sua cabeça.
+ encostasse na borda da cabeça do personagem.
 
-Todos os objetos usados na criação dos personagens são variáveis do tipo
- `THREE.Mesh()`, modelados usando formas geométricas e possuindo como
- material `THREE.MeshLambertMaterial()`, possibilitando a interação com
- as luzes e sombras definidas na cena.
+Todos os objetos usados na criação dos personagens são do tipo
+ `THREE.Mesh()`, o qual usa modelos geométricos e possui como
+ material `THREE.MeshLambertMaterial()`, possibilitando a interação dos
+ objetos com as luzes e sombras definidas na cena.
 
-A cena possui dois tipos de luzes. Uma do tipo **direcional**,
- implementada usando `THREE.DirectionalLight()`, necessária para gerar
- sombras onde a luz não bate diretamente e deixar mais claro onde isso
- ocorre, a fim de trazer maior realismo. A outra é a **luz ambiente**,
- implementada usando `THREE.AmbientLight()`, necessária para fornecer
- uma luz mínima à cena, possibilitando visualizar todos os objetos,
- mesmo que nenhuma luz direcional atinja os objetos em questão.
+### Luzes
+
+A cena possui dois tipos de luzes.
+
+Uma do tipo **direcional**, implementada usando
+ `THREE.DirectionalLight()`, necessária para gerar sombras onde a luz
+ não bate diretamente e deixar mais claro onde isso ocorre, a fim de
+ trazer maior realismo.
+ 
+A outra é a **luz ambiente**, implementada usando
+ `THREE.AmbientLight()`, necessária para fornecer uma luz mínima à cena,
+ possibilitando visualizar todos os objetos, mesmo que nenhuma luz
+ direcional atinja os objetos em questão.
+
+Para ser possível visualizar as sombras geradas a partir da utilização
+ da luz direcional, foi necessário reposicioná-la em um local afastado
+ da câmera, pois se ambos os elementos estivessem na mesma direção em
+ relação à cena, as sombras se projetariam atrás dos objetos, onde a
+ câmera não pudesse capturá-las.
 
 ## Membros
 
