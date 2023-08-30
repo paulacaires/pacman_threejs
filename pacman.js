@@ -11,32 +11,29 @@ var abrir;
 /*====		INICIO VAR SHADER		====*/
 
 // String do Vertex shader
-const VSHADER =	`varying vec2 v_uv;  
+const VSHADER =	`
+				uniform float u_time;
 				void main() {
-					v_uv = uv;
-					gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
-				}`
+					vec4 result = vec4(position.x, sin(position.z/2.5 + u_time) + position.y, position.z, 1.0);
+					gl_Position = projectionMatrix * modelViewMatrix * result;					
+				}
+				`
 				
 // String do fragment shader
-const FSHADER =	`varying vec2 v_uv;
-				uniform vec2 u_mouse;
-				uniform vec2 u_resolution;
-				uniform vec3 u_color;
-				uniform float u_time;
-				
+const FSHADER =	`	
+				uniform float u_time;			
 				void main() {
-					vec2 v = u_mouse / u_resolution;
-					vec2 uv = gl_FragCoord.xy / u_resolution;
-					gl_FragColor = vec4(1.0, 0.0, sin(u_time * 5.0) + 0.5, 1.0).rgba;
-				}`
-
+					gl_FragColor = vec4(1.0, 0.0, 0.0, abs(sin(u_time)) - 0.5);
+				}
+				`
 	
 /*
  uniform: valor que passamos para o shader que são 
  aplicados uniformemente para cada pixel
 */			
 const uniforms = {
-  u_time: { value: 0.0 },
+  u_time: { type: 'f',
+			value: 0.0 },
   u_color: { value: new THREE.Color(0xFF0000) }
 };
 
@@ -72,6 +69,7 @@ var render = function() {
 	system.rotateY(0.009);
 	renderer.render( scene, camera.cameras[cameraAtual] );
 	
+	// atualiza o tempo 
 	uniforms.u_time.value = clock.getElapsedTime();
 };
 
@@ -110,11 +108,6 @@ var createSystem = function() {
 
 	// angulo inicial
 	fantasma.rotateY(Math.PI * 0.5);
-	
-	// criando o shader
-	
-	var shader = createShader();
-	centro.add(shader);
 
 	// adicionando o centro no sistema
 	system.add(centro);
@@ -165,7 +158,7 @@ var createGhostHead = function() {
 var createGhostBody = function() {
 
 	var geometry_body = new THREE.CylinderGeometry( 0.9, 0.9, 1, 64, 64, true); 
-	var material_body = new THREE.MeshLambertMaterial( {color: 'red'} ); 
+	var material_body = new THREE.MeshLambertMaterial( {color: 'red'} );	
 	var body = new THREE.Mesh( geometry_body, material_body );
 
 	// adiciona efeitos de sombras
@@ -304,26 +297,6 @@ var createADisc = function() {
 
 }
 
-var createShader = function () {
-	 
-	var geometry = new THREE.CylinderGeometry( 0.5, 0.5, 1, 64, 64, true); 
-	var material = new THREE.ShaderMaterial({
-		vertexShader: VSHADER,
-		fragmentShader: FSHADER,
-		uniforms
-	});
-	var ico = new THREE.Mesh(geometry, material);
-	
-	return ico;
-	
-}
-
-
-
-
-
-
-
 // cria a animação do pacman
 var animatePacman = function() {
 	if (abrir == 1) {
@@ -378,24 +351,29 @@ var createCamera = function() {
 	cameraL.position.set(3, 2, 6);
 	cameraL.lookAt(scene.position);
 	cameraL.updateMatrixWorld();// usado para atualizar a matriz de projeção da câmera
-	cameraR.position.set(-3, 2, -6);
+	
+	// MUDAR DEPOIS
+	cameraR.position.set(30, 30, 30);
 	cameraR.lookAt(scene.position);
 	cameraR.updateMatrixWorld();
 };
 
 var createPlane = function() {
-	var planeGeometry = new THREE.PlaneGeometry(1000, 1000);
-	var planeMaterial = new THREE.MeshPhongMaterial( { color: 0x6959CD} );
+	
+	var planeGeometry = new THREE.BoxGeometry(20, 1, 20, 20, 1, 20);
+	var planeMaterial = new THREE.ShaderMaterial({
+		color: 0xFFFFFF,
+		wireframe: false,
+		vertexShader: VSHADER,
+		fragmentShader: FSHADER,
+		uniforms: uniforms
+	});
 
 	plane = new THREE.Mesh(planeGeometry, planeMaterial);
 
-	plane.castShadow = true;
-	plane.receiveShadow = true;
-
-	plane.rotation.x = -0.5 * Math.PI;
-	plane.position.y = -1;
-
-	plane.receiveShadow = true;
+	plane.position.x = -2;
+	plane.position.y = -5;
+	plane.position.z = -5;
 
 	scene.add(plane);
 };
