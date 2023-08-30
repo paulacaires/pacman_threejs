@@ -12,18 +12,21 @@ var abrir;
 
 // String do Vertex shader
 const VSHADER =	`
+				varying vec3 vPosition;
 				uniform float u_time;
 				void main() {
 					vec4 result = vec4(position.x, sin(position.z/2.5 + u_time) + position.y, position.z, 1.0);
 					gl_Position = projectionMatrix * modelViewMatrix * result;					
+					vPosition = position;
 				}
 				`
 				
 // String do fragment shader
 const FSHADER =	`	
-				uniform float u_time;			
+				//varying vec3 vPosition;
+				uniform float u_time;
 				void main() {
-					gl_FragColor = vec4(1.0, 0.0, 0.0, abs(sin(u_time)) - 0.5);
+					gl_FragColor = vec4(0.1, 0.3, 1, 1);
 				}
 				`
 	
@@ -34,7 +37,7 @@ const FSHADER =	`
 const uniforms = {
   u_time: { type: 'f',
 			value: 0.0 },
-  u_color: { value: new THREE.Color(0xFF0000) }
+  planeColor: { value: new THREE.Vector3(1, 1, 1) }
 };
 
 const clock = new THREE.Clock();
@@ -370,9 +373,9 @@ var createPlane = function() {
 	});
 
 	plane = new THREE.Mesh(planeGeometry, planeMaterial);
-
-	plane.position.x = -2;
-	plane.position.y = -5;
+	plane.rotation.y = Math.PI / 2;
+	plane.position.x = -3;
+	plane.position.y = -4;
 	plane.position.z = -5;
 
 	scene.add(plane);
