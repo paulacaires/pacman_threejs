@@ -7,6 +7,43 @@ var pacman;
 var fase;
 var abrir;
 
+
+/*====		INICIO VAR SHADER		====*/
+
+// String do Vertex shader
+const VSHADER =	`varying vec2 v_uv;  
+				void main() {
+					v_uv = uv;
+					gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+				}`
+				
+// String do fragment shader
+const FSHADER =	`varying vec2 v_uv;
+				uniform vec2 u_mouse;
+				uniform vec2 u_resolution;
+				uniform vec3 u_color;
+				uniform float u_time;
+				
+				void main() {
+					vec2 v = u_mouse / u_resolution;
+					vec2 uv = gl_FragCoord.xy / u_resolution;
+					gl_FragColor = vec4(1.0, 0.0, sin(u_time * 5.0) + 0.5, 1.0).rgba;
+				}`
+
+	
+/*
+ uniform: valor que passamos para o shader que são 
+ aplicados uniformemente para cada pixel
+*/			
+const uniforms = {
+  u_time: { value: 0.0 },
+  u_color: { value: new THREE.Color(0xFF0000) }
+};
+
+const clock = new THREE.Clock();
+
+/*====		FIM VAR SHADER		====*/
+
 // Animação do pacman
 var render = function() {
 
@@ -34,6 +71,8 @@ var render = function() {
 	// rotação do sistema
 	system.rotateY(0.009);
 	renderer.render( scene, camera.cameras[cameraAtual] );
+	
+	uniforms.u_time.value = clock.getElapsedTime();
 };
 
 /*
@@ -71,6 +110,11 @@ var createSystem = function() {
 
 	// angulo inicial
 	fantasma.rotateY(Math.PI * 0.5);
+	
+	// criando o shader
+	
+	var shader = createShader();
+	centro.add(shader);
 
 	// adicionando o centro no sistema
 	system.add(centro);
@@ -248,7 +292,7 @@ var createADisc = function() {
 	var material = new THREE.MeshLambertMaterial( { color: 'yellow' } );
 
 	// cria um disco
-	//    argumentos : escala, linhas de contorno
+	// argumentos : escala, linhas de contorno
 	var circle = new THREE.CircleGeometry( 1, 32 );
 	var disco = new THREE.Mesh( circle, material );
 
@@ -259,6 +303,26 @@ var createADisc = function() {
 	return disco;
 
 }
+
+var createShader = function () {
+	 
+	var geometry = new THREE.CylinderGeometry( 0.5, 0.5, 1, 64, 64, true); 
+	var material = new THREE.ShaderMaterial({
+		vertexShader: VSHADER,
+		fragmentShader: FSHADER,
+		uniforms
+	});
+	var ico = new THREE.Mesh(geometry, material);
+	
+	return ico;
+	
+}
+
+
+
+
+
+
 
 // cria a animação do pacman
 var animatePacman = function() {
@@ -347,8 +411,8 @@ var init = function() {
 	renderer.shadowMap.enabled = true;
 	renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 	document.body.appendChild( renderer.domElement );
-
-	// adiciona o pacman e as fontes de luz à cena
+	
+	// adiciona a cena (objetos) e as fontes de luz à cena
 	this.createSystem();
 	this.createCamera();
 	this.createPlane();
