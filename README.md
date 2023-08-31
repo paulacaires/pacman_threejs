@@ -155,7 +155,7 @@ Na cena, há um plano posicionado em baixo dos personagens para o qual escolhemo
 
 - Vertex Shader
 
-O vertex shader é o responsável pela posição de cada pixel. No trabalho, definimos o a posição como um movimento senoidal em função da posição em z e em função do tempo. 
+O vertex shader é o responsável pela posição de cada pixel. No trabalho, definimos a posição como um movimento senoidal em função da posição em z e em função do tempo. 
 
 - Fragment Shader
 
