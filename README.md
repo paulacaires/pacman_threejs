@@ -1,52 +1,26 @@
-# pacman_threejs
+# :space_invader: Projeto CG | **Pac-Man Three Js**
 
-## Conceito do projeto
+Esse projeto consiste em uma cena inspirada no jogo **Pacman** e seus **personagens**, implementada usando a biblioteca [**Three.js**](https://threejs.org/).
+Na cena, tentamos simular o _fantasminha_ perseguindo o _pacman_, enquanto esse anda em círculos para fugir do seu perseguidor.
 
-Esse projeto consiste em uma cena baseada no jogo **Pacman** e seus
- **personagens**, implementada usando a biblioteca [**Three.js**](https://threejs.org/).
+## :arrow_forward: Como executar
 
-Na cena temos o _fantasminha_ perseguindo o _pacman_, enquanto esse anda
- em círculos para fugir do seu perseguidor.
-
-## Execução
-
-Para executar o projeto, antes é necessário fazer download do zip do
- repositório ou cloná-lo usando o comando:
+Para executar o projeto, antes é necessário fazer download do zip do  repositório ou cloná-lo usando o comando:
 
 ```
 git clone https://github.com/mutannejs/pacman_threejs.git
 ```
 
-Dentro da pasta, basta abrir o documento `pacman.html` no navegador de
- sua preferência.
+Dentro da pasta, basta abrir o documento `pacman.html` no navegador de  sua preferência.
 
-Na parte superior da tela, temos a opção de alternar entre duas câmeras,
- cada uma com uma visualização diferente da mesma cena. Para alternar
- entre elas, basta clicar nos botões **Câmera 1** ou **Câmera 2**.
+Na parte superior da tela, temos a opção de alternar entre duas câmeras,  cada uma com uma visualização diferente da mesma cena. Para alternar entre elas, basta clicar nos botões **Câmera 1** ou **Câmera 2**.
 
-### Câmera 1
+## :computer: Implementação
 
-Na **câmera 1** podemos ver a cena ...
+Primeiramente, modelamos nossos dois personagens principais, o _Pacman_  e o _Fantasma_, ambos são na verdade do tipo `THREE.Group()`, que nada mais é que um grupo de objetos. Cada um desses objetos foi implementado em uma função própria, possibilitando a reutilização do código quando possível.
 
-![pacman_01.js](assets/pacman_01.jpg)
-
-### Câmera 2
-
-Na **câmera 2** podemos ver a cena ...
-
-![pacman_02.js](assets/pacman_02.jpg)
-
-## Implementação
-
-### Pacman e Fantasma
-
-Primeiramente, modelamos nossos dois personagens principais, o _Pacman_
- e o _Fantasma_, ambos são na verdade do tipo `THREE.Group()`, que nada
- mais é que um grupo de objetos. Cada um desses objetos foi implementado
- em uma função própria, possibilitando a reutilização do código quando
- possível.
-
-O **pacman** é formado por 6 objetos:
+### Pac-Man
+O **Pac-Man** é formado por 6 objetos:
 
 - seus olhos são duas esferas, modeladas usando
  `THREE.SphereGeometry()`;
@@ -61,6 +35,7 @@ O **pacman** é formado por 6 objetos:
  em cima da abertura das partes do corpo, cobrindo assim a abertura
  obtida ao definir o valor de _phiLenght_ como _Math.PI_.
 
+### Fantasma
 O **fantasma** é formado por 6 objetos:
 
 - seus olhos também são do tipo `THREE.Group()`, e cada um deles é
@@ -82,14 +57,11 @@ Todos os objetos usados na criação dos personagens são do tipo
  material `THREE.MeshLambertMaterial()`, possibilitando a interação dos
  objetos com as luzes e sombras definidas na cena.
 
-### Luzes
+## :bulb: Iluminação
 
 A cena possui dois tipos de luzes.
 
-Uma do tipo **direcional**, implementada usando
- `THREE.DirectionalLight()`, necessária para gerar sombras onde a luz
- não bate diretamente e deixar mais claro onde isso ocorre, a fim de
- trazer maior realismo.
+Uma do tipo **direcional**, implementada usando `THREE.DirectionalLight()`, necessária para gerar sombras onde a luz não bate diretamente e deixar mais claro onde isso ocorre, a fim de trazer maior realismo.
  
 A outra é a **luz ambiente**, implementada usando
  `THREE.AmbientLight()`, necessária para fornecer uma luz mínima à cena,
@@ -102,7 +74,7 @@ Para ser possível visualizar as sombras geradas a partir da utilização
  relação à cena, as sombras se projetariam atrás dos objetos, onde a
  câmera não pudesse capturá-las.
 
-### Câmeras
+## :movie_camera: Câmeras
 
 Como mencionado na descrição de como executar o projeto, a cena possui
  duas câmeras que podem ser escolhidas para gerar imagens diferentes
@@ -110,6 +82,7 @@ Como mencionado na descrição de como executar o projeto, a cena possui
  tipo `THREE.ArrayCamera`, possibilitando e facilitando a escolha de
  apenas uma câmera para gerar imagem durante a renderização da cena.
 
+### Câmera 01
 A **primeira câmera** foi implementada usando
  `THREE.PerspectiveCamera()`, e mostra a cena do modo como os seres
  humanos enxergam, ou seja, com perspectiva. Essa escolha faz com que
@@ -117,6 +90,7 @@ A **primeira câmera** foi implementada usando
  dependendo da distância que estão da câmera, podendo até mesmo ficarem
  distorcidos.
 
+### Câmera 02
 A **segunda câmera**.
 
 Ao reposicionar ambas as câmeras na cena, foi necessário usar o método
@@ -124,7 +98,7 @@ Ao reposicionar ambas as câmeras na cena, foi necessário usar o método
  centro da cena, centralizando a imagem em relação ao local onde os
  personagens se encontram, sem que sumam da tela durante a animação.
 
-### Animação
+## :walking: Animação
 
 Para criar a animação da cena e dos personagens, primeiramente foi
  criado outro elemento do tipo `THREE.Group()` chamado de _system_, ao
@@ -146,12 +120,12 @@ O movimento de **"comer"** do pacman, foi implementado como o
  do momento. Lembrando que os eixos X e Y do pacman estão sempre
  mundando de posição durante a animação.
 
-### Plano
+## :house_with_garden: Plano e Shader
 
 Por fim, foi criado um plano posicionado em baixo dos personagens, o
  qual escolhemos para utilizar o nosso shader próprio.
 
-## Membros
+## :busts_in_silhouette: Membros
 
 Paula Caires Silva - [https://github.com/paulacaires](https://github.com/paulacaires)
 
