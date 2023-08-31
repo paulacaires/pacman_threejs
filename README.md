@@ -3,6 +3,8 @@
 Esse projeto consiste em uma cena inspirada no jogo **Pacman** e seus **personagens**, implementada usando a biblioteca [**Three.js**](https://threejs.org/).
 Na cena, tentamos simular o _fantasma_ perseguindo o _pacman_, enquanto esse anda em círculos para fugir do seu perseguidor.
 
+![Funcionamento das câmeras](assets/cameras_gif.gif)
+
 [**:arrow_forward: Como executar**](https://github.com/mutannejs/pacman_threejs#arrow_forward-como-executar) : uma breve descrição de como baixar e executar o projeto.
 
 [**:computer: Implementação**](https://github.com/mutannejs/pacman_threejs#computer-implementação) : descreve como os principais elementos da cena foram implementados.
@@ -78,7 +80,7 @@ Todos os objetos usados na criação dos personagens são do tipo
  `THREE.Mesh()`, o qual usa modelos geométricos e possui como
  material `THREE.MeshLambertMaterial()`, possibilitando a interação dos
  objetos com as luzes e sombras definidas na cena.
-
+ 
 ## :bulb: Iluminação
 
 A cena possui dois tipos de luzes.
@@ -112,15 +114,21 @@ A **primeira câmera** foi implementada usando
  dependendo da distância que estão da câmera, podendo até mesmo ficarem
  distorcidos.
 
-### Câmera 02
-A **segunda câmera**.
-
-Ao reposicionar ambas as câmeras na cena, foi necessário usar o método
- `lookAt(scene.position)` para cada uma delas, para redirecioná-las ao
+ 
+Ao reposicionar a câmera na cena, foi necessário usar o método
+ `lookAt(scene.position)` para redirecioná-la ao
  centro da cena, centralizando a imagem em relação ao local onde os
  personagens se encontram, sem que sumam da tela durante a animação.
 
-## :walking: Animação
+ ![Primeira câmera](assets/pacman_01.png)
+
+### Câmera 02
+
+A segunda câmera tem a perspectiva ortográfica. Nesse modo de projeção, o tamanho dos objetos são constantes independente da distância da câmera. Sabendo disso, para os objetos não ficarem muito pequenos, a Essa câmera dá ênfase nas ondulações e a animação do plano em relação aos personagens. 
+
+ ![Segunda câmera](assets/pacman_02.png)
+
+## :walking: Animações
 
 Para criar a animação da cena e dos personagens, primeiramente foi
  criado outro elemento do tipo `THREE.Group()` chamado de _system_, ao
@@ -144,8 +152,19 @@ O movimento de **"comer"** do pacman, foi implementado como o
 
 ## :house_with_garden: Plano e Shader
 
-Por fim, foi criado um plano posicionado em baixo dos personagens, o
- qual escolhemos para utilizar o nosso shader próprio.
+Na cena, há um plano posicionado em baixo dos personagens para o qual escolhemos utilizar um shader.
+
+- Vertex Shader
+
+O vertex shader é o responsável pela posição de cada pixel. No trabalho, definimos o a posição como um movimento senoidal em função da posição em z e em função do tempo. 
+
+- Fragment Shader
+
+O fragment shader é responsável pela cor. Escolhemos o tom azul para a variável `gl_FragColor`.
+
+- Uniforms
+
+Uniforms são variáveis que podem ser passadas da aplicação para o programa de shader. Essa variável foi definida para definir as propriedades do tempo, já que o movimento senoidal do vertex shader depende disso.
 
 ## :busts_in_silhouette: Membros
 
