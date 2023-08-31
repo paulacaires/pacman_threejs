@@ -1,7 +1,29 @@
 # :space_invader: Projeto CG | **Pac-Man Three Js**
 
 Esse projeto consiste em uma cena inspirada no jogo **Pacman** e seus **personagens**, implementada usando a biblioteca [**Three.js**](https://threejs.org/).
-Na cena, tentamos simular o _fantasminha_ perseguindo o _pacman_, enquanto esse anda em círculos para fugir do seu perseguidor.
+Na cena, tentamos simular o _fantasma_ perseguindo o _pacman_, enquanto esse anda em círculos para fugir do seu perseguidor.
+
+[**:arrow_forward: Como executar**](https://github.com/mutannejs/pacman_threejs#arrow_forward-como-executar) : uma breve descrição de como baixar e executar o projeto.
+
+[**:computer: Implementação**](https://github.com/mutannejs/pacman_threejs#computer-implementação) : descreve como os principais elementos da cena foram implementados.
+
+- [**Pac-Man**](https://github.com/mutannejs/pacman_threejs#pac-man) : como o personagem Pac-Man foi modelado.
+
+- [**Fantasma**](https://github.com/mutannejs/pacman_threejs#fantasma) : como o Fantasma foi modelado.
+
+[**:bulb: Iluminação**](https://github.com/mutannejs/pacman_threejs#bulb-ilumina%C3%A7%C3%A3o) : os diferentes tipos de luzes usadas na cena.
+
+[**:movie_camera: Câmeras**](https://github.com/mutannejs/pacman_threejs#movie_camera-c%C3%A2meras) : descreve como as duas câmeras foram inseridas na cena para ser possível visualizar a cena a partir de dois pontos diferentes.
+
+- [**Câmera 01**](https://github.com/mutannejs/pacman_threejs#c%C3%A2mera-01) : uma maior descrição de como a primeira câmera foi implementada e como uma `PerspectiveCamera` funciona.
+
+- [**Câmera 02**](https://github.com/mutannejs/pacman_threejs#c%C3%A2mera-02) : uma maior descrição de como a segunda câmera foi implementada e como uma `OrthographicCamera` funciona.
+
+[**:walking: Animação**](https://github.com/mutannejs/pacman_threejs#walking-anima%C3%A7%C3%A3o) : como a animação dos personagens foram criadas.
+
+[**:house_with_garden: Plano e Shader**](https://github.com/mutannejs/pacman_threejs#house_with_garden-plano-e-shader) : como o plano foi implementado e também como o shader usado foi desenvolvido.
+
+[**:busts_in_silhouette: Membros**](https://github.com/mutannejs/pacman_threejs#busts_in_silhouette-membros) : membros envolvidos no projeto.
 
 ## :arrow_forward: Como executar
 
