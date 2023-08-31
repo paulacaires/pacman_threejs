@@ -20,8 +20,6 @@ git clone https://github.com/mutannejs/pacman_threejs.git
 Dentro da pasta, basta abrir o documento `pacman.html` no navegador de
  sua preferência.
 
-## Câmeras
-
 Na parte superior da tela, temos a opção de alternar entre duas câmeras,
  cada uma com uma visualização diferente da mesma cena. Para alternar
  entre elas, basta clicar nos botões **Câmera 1** ou **Câmera 2**.
@@ -103,6 +101,55 @@ Para ser possível visualizar as sombras geradas a partir da utilização
  da câmera, pois se ambos os elementos estivessem na mesma direção em
  relação à cena, as sombras se projetariam atrás dos objetos, onde a
  câmera não pudesse capturá-las.
+
+### Câmeras
+
+Como mencionado na descrição de como executar o projeto, a cena possui
+ duas câmeras que podem ser escolhidas para gerar imagens diferentes
+ da cena. Ambas após serem cridas, foram inseridas em um elemento do
+ tipo `THREE.ArrayCamera`, possibilitando e facilitando a escolha de
+ apenas uma câmera para gerar imagem durante a renderização da cena.
+
+A **primeira câmera** foi implementada usando
+ `THREE.PerspectiveCamera()`, e mostra a cena do modo como os seres
+ humanos enxergam, ou seja, com perspectiva. Essa escolha faz com que
+ ao andar da animação, os objetos em cena fiquem maior ou menores
+ dependendo da distância que estão da câmera, podendo até mesmo ficarem
+ distorcidos.
+
+A **segunda câmera**.
+
+Ao reposicionar ambas as câmeras na cena, foi necessário usar o método
+ `lookAt(scene.position)` para cada uma delas, para redirecioná-las ao
+ centro da cena, centralizando a imagem em relação ao local onde os
+ personagens se encontram, sem que sumam da tela durante a animação.
+
+### Animação
+
+Para criar a animação da cena e dos personagens, primeiramente foi
+ criado outro elemento do tipo `THREE.Group()` chamado de _system_, ao
+ qual foi adicionado o pacman e o fantasma. Os personagens foram
+ reposicionados e rotacionados para que ficassem um pouco distantes do
+ centro do _system_ e para que o fantasma ficasse atrás do pacman.
+
+O movimento de **"andar"** dos personagens, foi implementado como o
+ rotacionamento de _system_ em torno do _eixo Y_, assim, o pacman e o
+ fantasma parecem rodar em círculos, enquanto um persegue o outro sem
+ nunca alcançá-lo.
+
+O movimento de **"comer"** do pacman, foi implementado como o
+ rotacionamento das duas partes do corpo do pacman (considerando uma
+ parte a junção de uma meia-esfera e de um disco) em torno do _eixo Y_,
+ porém, como os objetos que compõem o personagem foram rotacionados
+ exatamente _Math.PI*0.5_ em torno do _eixo X_, esse rotacionamento
+ parece estar sendo feito em torno do _eixo Z_ ou do _eixo X_ dependendo
+ do momento. Lembrando que os eixos X e Y do pacman estão sempre
+ mundando de posição durante a animação.
+
+### Plano
+
+Por fim, foi criado um plano posicionado em baixo dos personagens, o
+ qual escolhemos para utilizar o nosso shader próprio.
 
 ## Membros
 
