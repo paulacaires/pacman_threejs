@@ -29,13 +29,13 @@ Na cena, tentamos simular o _fantasma_ perseguindo o _pacman_, enquanto esse and
 
 ## :arrow_forward: Como executar
 
-Para executar o projeto, antes é necessário fazer download do zip do  repositório ou cloná-lo usando o comando:
+Para executar o projeto é necessário fazer o download do zip do repositório ou cloná-lo usando o comando:
 
 ```
 git clone https://github.com/mutannejs/pacman_threejs.git
 ```
 
-Dentro da pasta, basta abrir o documento `pacman.html` no navegador de  sua preferência.
+Dentro da pasta, basta abrir o documento `pacman.html` no navegador de sua preferência.
 
 Na parte superior da tela, temos a opção de alternar entre duas câmeras,  cada uma com uma visualização diferente da mesma cena. Para alternar entre elas, basta clicar nos botões **Câmera 1** ou **Câmera 2**.
 
@@ -110,10 +110,9 @@ Como mencionado na descrição de como executar o projeto, a cena possui
 A **primeira câmera** foi implementada usando
  `THREE.PerspectiveCamera()`, e mostra a cena do modo como os seres
  humanos enxergam, ou seja, com perspectiva. Essa escolha faz com que
- ao andar da animação, os objetos em cena fiquem maior ou menores
+ ao decorrer da animação, os objetos em cena fiquem maiores ou menores
  dependendo da distância que estão da câmera, podendo até mesmo ficarem
  distorcidos.
-
  
 Ao reposicionar a câmera na cena, foi necessário usar o método
  `lookAt(scene.position)` para redirecioná-la ao
@@ -124,7 +123,7 @@ Ao reposicionar a câmera na cena, foi necessário usar o método
 
 ### Câmera 02
 
-A segunda câmera tem a perspectiva ortográfica. Nesse modo de projeção, o tamanho dos objetos são constantes independente da distância da câmera. Sabendo disso, para os objetos não ficarem muito pequenos, a Essa câmera dá ênfase nas ondulações e a animação do plano em relação aos personagens. 
+A segunda câmera tem a perspectiva ortográfica. Nesse modo de projeção, o tamanho dos objetos são constantes independente da distância da câmera. Sabendo disso, para os objetos não ficarem muito pequenos, a propriedade `.zoom` foi alterada de 1 (Default) para 90. Essa câmera dá ênfase nas ondulações e na animação do plano em relação aos personagens. 
 
  ![Segunda câmera](assets/pacman_02.png)
 
