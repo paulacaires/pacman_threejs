@@ -340,13 +340,20 @@ var createCamera = function() {
 	);
 
 	// cria a subcâmera da direita
-	var cameraR = new THREE.PerspectiveCamera(
+	/*var cameraR = new THREE.PerspectiveCamera(
 		50,
 		window.innerWidth / window.innerHeight,
 		0.1,
 		1000
+	);	*/
+	
+	var cameraR = new THREE.OrthographicCamera(
+		window.innerWidth / - 2, 
+		window.innerWidth / 2, 
+		window.innerHeight / 2, 
+		window.innerHeight / - 2, -10, 1000 
 	);
-
+	
 	// adiciona as duas câmeras a uma ArrayCamera (para amabas serem renderizadas)
 	camera = new THREE.ArrayCamera( [cameraL, cameraR]);
 
@@ -355,15 +362,15 @@ var createCamera = function() {
 	cameraL.lookAt(scene.position);
 	cameraL.updateMatrixWorld();// usado para atualizar a matriz de projeção da câmera
 	
-	// MUDAR DEPOIS
-	cameraR.position.set(30, 30, 30);
+	cameraR.zoom = 90;
 	cameraR.lookAt(scene.position);
+	cameraR.updateProjectionMatrix();
 	cameraR.updateMatrixWorld();
 };
 
 var createPlane = function() {
 	
-	var planeGeometry = new THREE.BoxGeometry(20, 1, 20, 20, 1, 20);
+	var planeGeometry = new THREE.BoxGeometry(30, 1, 30, 30, 1, 30);
 	var planeMaterial = new THREE.ShaderMaterial({
 		color: 0xFFFFFF,
 		wireframe: false,
@@ -375,7 +382,7 @@ var createPlane = function() {
 	plane = new THREE.Mesh(planeGeometry, planeMaterial);
 	plane.rotation.y = Math.PI / 2;
 	plane.position.x = -3;
-	plane.position.y = -4;
+	plane.position.y = -2.8;
 	plane.position.z = -5;
 
 	scene.add(plane);
