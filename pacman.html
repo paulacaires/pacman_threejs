@@ -11,7 +11,10 @@
 	<body>
 		<script src="three.min.js"></script>
 		<script src="pacman.js"></script>
-		<button type="button" onclick="cameraAtual = 0">Câmera 1</button>
-		<button type="button" onclick="cameraAtual = 1">Câmera 2</button>
+		<div class="opcao_camera" style="position: fixed; background-color: black; padding-top: 3px; padding-left: 5px">
+			<p style="color: #d3d3d3; line-height: 0px; font-size: 20px">Clique aqui para mudar de câmera:</p>
+			<button type="button" style="margin-left: 1%;" onclick="cameraAtual = 0">Câmera 1</button>
+			<button type="button" style="margin-left: 1%" onclick="cameraAtual = 1">Câmera 2</button>
+		</div>	
 	</body>
 </html>
